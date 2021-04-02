@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import {data} from './products';
+import { data } from './products';
+import axios from 'axios';
 import { CartContext } from './contexts/CartContext';
 import { ProductContext } from './contexts/ProductContext'
 import PrivateRoute from './components/PrivateRoute';
@@ -12,10 +13,21 @@ import ShoppingCart from './components/ShoppingCart';
 import useCart from './hooks/useCart';
 
 function App() {
-	const [products] = useState(data);
+	const [products, setProducts] = useState([]);
 	const [cart, setCart] = useCart([]);
 	console.log(cart)
 
+  useEffect(()=>{
+    axios.get('http://localhost:5000/api/products')
+			.then(res => {
+				console.log(res.data)
+        setProducts(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+	}, []);
+	
 	const addItem = item => {
 		// add the given item to the cart
 		//console.log(item, cart)
@@ -40,7 +52,7 @@ function App() {
 						</Route>
 						<Route path='/login' component={LoginForm}/>
 						<Route path='/signup' component={SignUpForm}/>
-						<Route exact path="/items">
+						<Route exact path="/products">
 							<Products />
 							{/* <Products products={products} addItem={addItem} /> */}
 						</Route>
