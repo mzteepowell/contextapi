@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import * as yup from 'yup'
 import { signUpFormSchema } from '../utils/signUpFormSchema'
 import { useHistory } from 'react-router-dom'
-import axiosWithAuth from '../utils/axiosWithAuth'
+import axiosWithAuth from '../utils/axiosWithAuth';
+import axios from 'axios';
 
 const initialFormValues = {
   first_name: '',
@@ -55,7 +56,7 @@ export default function LoginForm() {
   }
 
   const loginUser = (newUser) => {
-    axiosWithAuth()
+    axios
       .post('https://reqres.in/api/users', newUser)
       .then(res => {
         localStorage.setItem('token', res.data.payload);

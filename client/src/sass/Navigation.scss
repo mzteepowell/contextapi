@@ -1,9 +1,13 @@
+nav {
+	
+}
 .navbar-ul {
 	display: flex;
 	justify-content: flex-end;
 	padding: 10px 100px;
 	transition: 0.2s ease-in;
 	margin-bottom: 40px;
+	width: 100%;
 
 	background: #515457;
 	a {
