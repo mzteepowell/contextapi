@@ -60,7 +60,7 @@ export default function LoginForm() {
       .then(res => {
         localStorage.setItem('token', res.data.payload);
         console.log(res.data)
-        push('items')
+        push('/products')
       })
       .catch(err=>{
         console.log(err);

@@ -19,7 +19,14 @@ export const EditItemForm = (props) => {
       });
   }, [id])
 
-  	const onChange = 
+  const onChange = (e) => {
+    setItem({
+			...item,
+			[e.target.name]: e.target.value
+		});
+		console.log(e.target.name, e.target.value)
+		console.log(item)
+	
 	}
   
   const handleSubmit = (e) => {

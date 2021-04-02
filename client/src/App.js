@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import { data } from './products';
+// import { data } from './products';
 import axios from 'axios';
 import { CartContext } from './contexts/CartContext';
 import { ProductContext } from './contexts/ProductContext'
@@ -10,9 +10,11 @@ import LoginForm from './components/LoginForm';
 import SignUpForm from './components/SignUpForm';
 import Products from './components/Products';
 import ShoppingCart from './components/ShoppingCart';
+import SellersDashboard from './components/SellersDashboard';
 import useCart from './hooks/useCart';
+import AddItemForm from './components/AddItemForm';
 
-function App() {
+function App({newProducts}) {
 	const [products, setProducts] = useState([]);
 	const [cart, setCart] = useCart([]);
 	console.log(cart)
@@ -27,7 +29,8 @@ function App() {
         console.log(err);
       });
 	}, []);
-	
+
+	console.log(products);
 	const addItem = item => {
 		// add the given item to the cart
 		//console.log(item, cart)
@@ -42,7 +45,8 @@ function App() {
 
 	return (
 		<div className="App">
-			<ProductContext.Provider value={{ products, addItem }}>
+			<ProductContext.Provider value={{ products, setProducts, addItem }}>
+
 				<CartContext.Provider value={{cart, removeItem}}>
 					<Navigation />
 					{/* Routes */}
@@ -52,12 +56,18 @@ function App() {
 						</Route>
 						<Route path='/login' component={LoginForm}/>
 						<Route path='/signup' component={SignUpForm}/>
-						<Route exact path="/products">
-							<Products />
-							{/* <Products products={products} addItem={addItem} /> */}
-						</Route>
+						<PrivateRoute exact path="/products">
+							{/* <Products /> */}
+							<Products products={products} addItem={addItem} />
+						</PrivateRoute>
 						<PrivateRoute path="/cart">
 							<ShoppingCart />
+						</PrivateRoute>
+						<PrivateRoute exact path='/sellers'>
+							<SellersDashboard/>
+							</PrivateRoute>
+						<PrivateRoute path='/sellers/add' >
+							<AddItemForm/>
 						</PrivateRoute>
 					</Switch>
 				</CartContext.Provider>

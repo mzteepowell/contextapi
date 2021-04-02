@@ -37,7 +37,7 @@ const Navigation = props => {
 						</NavLink>}
 					</li>
           <li className='navbar-li'>
-            {localStorage.getItem('token') && <NavLink to="/users">Sellers</NavLink>}
+            {localStorage.getItem('token') && <NavLink to="/sellers">Sellers</NavLink>}
 					</li>
 					<li className='navbar-li'>
             {localStorage.getItem('token') && <Link onClick={logout}>Logout</Link>}

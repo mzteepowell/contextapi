@@ -6,7 +6,7 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(CORS());
-
+let newProducts = [{}]
 let products = [
 	{
 		id: 1,
@@ -27,7 +27,7 @@ let products = [
 		id: 3,
 		title: 'Macbook Pro',
 		price: 60.99,
-		image: `https://theangelconsultant.com/buildweek/pic02.jpg}`,
+		image: `https://theangelconsultant.com/buildweek/laptop.jpg`,
 		descripton: "Please add description to data object"
 	},
 	{
@@ -83,6 +83,16 @@ app.post("/api/products", (req, res) => {
     const newProduct = req.body;
     newProduct["id"] = productId;
     products.push(newProduct);
+  }
+  ++productId;
+  res.status(201).json(products);
+});
+
+app.post("/api/newproduct", (req, res) => {
+  if (req.body.title !== undefined) {
+    const newProduct = req.body;
+    newProduct["id"] = productId;
+    newProducts.push(newProduct);
   }
   ++productId;
   res.status(201).json(products);
