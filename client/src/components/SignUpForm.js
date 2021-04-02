@@ -1,37 +1,70 @@
-import React, { useState } from 'react'
-import axiosWithAuth from '../utils/axiosWithAuth';
+import React, { useState, useEffect } from 'react'  
 import * as yup from 'yup'
 import { signUpFormSchema } from '../utils/signUpFormSchema';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 const initialFormValues = {
-  first_name: '',
-  last_name: '',
-  role: '',
-  email: '',
-  password: '',
+    userrole:{
+        userroleid: 0,
+        userroletype: "",
+    },
+    username: "",
+    fname: "",
+    lname: "",
+    email: "",
+    password: "",
+  }
+
+const initialFormErrors = { 
+  userrole:{
+        userroleid: 0,
+        userroletype: "",
+    },
+    username: "",
+    fname: "",
+    lname: "",
+    email: "",
+    password: "",
 }
 
-const initialFormErrors = {
-  first_name: '',
-  last_name: '',
-  role: '',
-  email: '',
-  password: '',
-}
+const initialDisabled = true;
 
 export default function SignUpForm() {
 
-  const [user, setUser] = useState(initialFormValues)
   const [formValues, setFormValues] = useState(initialFormValues)
   const [formErrors, setFormErrors] = useState(initialFormErrors)
+  const [disabled, setDisabled] = useState(initialDisabled);
   const { push } = useHistory();
 
+  const signUpUser = (newUser) => {
+    axios
+    .post('https://usemytechstuff-tt26.herokuapp.com/users/user', newUser)
+    .then(res => {
+      console.log(res.data)
+      setFormValues(initialFormValues)
+      push('/login')
+    })
+    .catch(err => {
+      console.log(err.response)
+    })
+  }
+
+   useEffect(() => {
+        signUpFormSchema.isValid(formValues).then(valid => {
+          console.log(valid)
+          return setDisabled(!valid)}
+     )
+   }, [formValues])
   
-  const onChange = (evt) => {
-    const { name, value } = evt.target
-    console.log(evt.target.name, evt.target.value)
+  const onSubmit = (evt) => {
+    evt.preventDefault();
+    signUpUser(finalForm)
+  }
+
+  const inputChange = (name, value) => {
+    // const { name, value } = evt.target
+    // console.log(evt.target.name, evt.target.value)
 
     yup
       .reach(signUpFormSchema, name)
@@ -52,108 +85,104 @@ export default function SignUpForm() {
     setFormValues({
       ...formValues, 
       [name]:
-        //Check for checkboxes
-        evt.target.type === 'checkbox' ? evt.target.checked :
-          value,
+        value,
     })
   }
-
-  const signUpUser = (newUser) => {
-    axios
-      .post('https://reqres.in/api/users', newUser)
-      .then(res => {
-        console.log(res.data)
-        setUser(res.data)
-        setFormValues(initialFormValues)
-        push('/login')
-      })
-      .catch(err => {
-        console.log(err.response)
-      })
-    }
-  const onSubmit = (evt) => {
-    evt.preventDefault();
-    
-    const newUser = {
-      first_name: formValues.first_name.trim(),
-      last_name: formValues.last_name.trim(),
-      role: formValues.role,
-      email: formValues.email.trim(),
-      password: formValues.password.trim(),
-    }
-    
-    signUpUser(newUser)
-    // // call to API
-
-    // console.log(newUser)
+  const onChange = evt => {
+    const { name, value } = evt.target;
+    inputChange(name, value);
   }
-  console.log(user)
-  return (
-    <div>
-      <form className="form container" onSubmit={onSubmit}>
-      <div>
-          <label>
-            First Name:
-            <input
-              value={formValues.first_name}
-              onChange={onChange}
-              name="first_name"
-              type="text"
-            />
-            {formErrors.first_name}
-          </label>
-        </div>
-        <div>
-          <label>
-            Last Name:
-            <input
-              value={formValues.last_name}
-              onChange={onChange}
-              name="last_name"
-              type="text"
-            />
-            {formErrors.last_name}
-          </label>
-        </div>
-        <div>
-          <label>
-            Role
-            <select onChange={onChange} value={formValues.role} name="role">
-              <option value="">-- Select an Option --</option>
-              <option value="owner">Owner</option>
-              <option value="renter">Renter</option>
-            </select>
-          </label>
-        </div>
-        <div>
-          <label>
-            Email:
-            <input
-              value={formValues.email}
-              onChange={onChange}
-              name="email"
-              type="text"
-            />
-            {formErrors.email}
-          </label>
-        </div>
-        <div>
-          <label>
-            Password:
-            <input
-              value={formValues.password}
-              onChange={onChange}
-              name="password"
-              type="password"
-            />
-            {formErrors.password}
-          </label>
-        </div>
-        <div>
-          <button id="submitBtn">Sign Up</button>
-        </div>
-      </form>
-    </div>
-  )
 
-}
+  const owner = {
+    userrole: {
+      userroleid: 1,
+      userroletype: "OWNER"
+    }
+  }
+  const renter = {
+    userrole: {
+      userroleid: 2,
+      userroletype: "RENTER"
+    }
+  }
+  
+  let finalForm;
+  if (formValues.userrole === "1") {
+    finalForm = { ...formValues, ...owner };
+  }
+  else if (formValues.userrole === "2") {
+    finalForm = { ...formValues, ...renter };
+  }
+
+    return (
+      <div>
+        <form className="form container" onSubmit={onSubmit}>
+          <div>
+            <label className='form-row' >
+              <input
+                type="text"
+                onChange={onChange}
+                placeholder="First Name"
+                name="fname"
+                value={formValues.fname}
+              />
+              {formErrors.fname}
+            </label>
+            <label className='form-row'>
+              <input
+                type="text"
+                onChange={onChange}
+                placeholder="Last Name"
+                name="lname"
+                value={formValues.lname}
+              />
+            </label>
+            <label className='form-row'>
+              <input
+                type="text"
+                onChange={onChange}
+                placeholder="Username"
+                name="username"
+                value={formValues.username}
+              />
+              {formErrors.username}
+            </label>
+            <label className='form-row'>
+              <input
+                type="email"
+                onChange={onChange}
+                placeholder="E-mail"
+                name="email"
+                value={formValues.email}
+              />
+            </label>
+            <label className='form-row'>
+              <input
+                type="password"
+                onChange={onChange}
+                placeholder="Password"
+                name="password"
+                value={formValues.password}
+              />
+              {formErrors.password}
+            </label >
+            
+            <label className='form-row' >
+              <p>Account Role </p>
+              <select name="userrole" value={formValues.userrole} onChange={onChange}>
+                <option value="none">----Select----</option>
+                <option value={1}>OWNER</option>
+                <option value={2}>RENTER</option>
+              </select>
+              {formErrors.userrole.type}
+            </label>
+          </div>
+          <div>
+          </div>
+          <div className='form-button'>
+            <button disabled={disabled}>Sign Up</button>
+          </div>
+        </form>
+      </div>
+    )
+  }

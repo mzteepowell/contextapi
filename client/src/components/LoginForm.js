@@ -1,35 +1,32 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import * as yup from 'yup'
-import { signUpFormSchema } from '../utils/signUpFormSchema'
+import formSchema from '../utils/formSchema'
 import { useHistory } from 'react-router-dom'
-import axiosWithAuth from '../utils/axiosWithAuth';
+import { NewProductContext, ProductContext } from '../contexts/ProductContext';
 import axios from 'axios';
 
 const initialFormValues = {
-  first_name: '',
-  last_name: '',
-  role: '',
-  email: '',
+  username: '',
   password: '',
 }
 
 const initialFormErrors = {
-  email: '',
+  username: '',
   password: '',
 }
 
-export default function LoginForm() {
+const initialDisabled = true
 
-  const [, setUser] = useState({})
+export default function LoginForm() {
   const [formValues, setFormValues] = useState(initialFormValues)
   const [formErrors, setFormErrors] = useState(initialFormErrors)
+  const [disabled, setDisabled] = useState(initialDisabled)
+  const { setIsLoggedIn } = useContext(ProductContext)
   const { push } = useHistory();
 
-  const onChange = (evt) => {
-    const { name, value } = evt.target
-
+  const update = (name, value) => {
     yup
-      .reach(signUpFormSchema, name) // get to this part of the schema
+      .reach(formSchema, name) // get to this part of the schema
       //we can then run validate using the value
       .validate(value) // validate this value
       .then(() => {
@@ -55,46 +52,52 @@ export default function LoginForm() {
     })
   }
 
-  const loginUser = (newUser) => {
-    axios
-      .post('https://reqres.in/api/users', newUser)
-      .then(res => {
-        localStorage.setItem('token', res.data.payload);
-        console.log(res.data)
-        push('/products')
-      })
-      .catch(err=>{
-        console.log(err);
-      });
-  }
+  useEffect(() => {
+        formSchema.isValid(formValues).then(valid => setDisabled(!valid))
+      }, [formValues])
 
   const onSubmit = (evt) => {
     evt.preventDefault();
-
-    const newUser = {
-      username: formValues.email.trim(),
-      password: formValues.password.trim(),
-    }
-
-    // call to API
-    loginUser(newUser)
-    setUser(newUser)
-    setFormValues(initialFormValues)
+    axios
+          .post(
+            "https://usemytechstuff-tt26.herokuapp.com/login",
+            `grant_type=password&username=${formValues.username}&password=${formValues.password}`, 
+            {
+              headers: {
+                Authorization: `Basic ${btoa("lambda-client:lambda-secret")}`,
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+            },
+          )
+          .then((res) => {
+            // console.log("res.data log:", res.data);
+            setIsLoggedIn(true);
+            localStorage.setItem("token", res.data.access_token);
+            localStorage.setItem("name", formValues.username);
+            push("/products");
+            // console.log(localStorage.getItem("name"));
+          })
+          .catch((err) => console.log({err}))
   }
 
+  const change = (evt) => {
+        const { name, value } = evt.target;
+        update(name, value);
+      };
+  
   return (
     <div>
       <form className="form container" onSubmit={onSubmit}>
         <div>
           <label>
-            Email:
+            Username:
             <input
-              value={formValues.email}
-              onChange={onChange}
-              name="email"
+              value={formValues.username}
+              onChange={change}
+              name="username"
               type="text"
             />
-            {formErrors.email}
+            {formErrors.username}
           </label>
         </div>
         <div>
@@ -102,7 +105,7 @@ export default function LoginForm() {
             Password:
             <input
               value={formValues.password}
-              onChange={onChange}
+              onChange={change}
               name="password"
               type="password"
             />
@@ -110,7 +113,8 @@ export default function LoginForm() {
           </label>
         </div>
         <div>
-          <button id="submitBtn">Log In</button>
+          <button id="submitBtn"
+          disabled={disabled}>Log In</button>
         </div>
       </form>
     </div>

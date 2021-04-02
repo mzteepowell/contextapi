@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 // import { data } from './products';
 import axios from 'axios';
+import axiosWithAuth from './utils/axiosWithAuth';
 import { CartContext } from './contexts/CartContext';
 import { ProductContext } from './contexts/ProductContext'
 import PrivateRoute from './components/PrivateRoute';
@@ -14,9 +15,24 @@ import SellersDashboard from './components/SellersDashboard';
 import useCart from './hooks/useCart';
 import AddItemForm from './components/AddItemForm';
 
-function App({newProducts}) {
+function App() {
 	const [products, setProducts] = useState([]);
 	const [cart, setCart] = useCart([]);
+	const [, setIsLoggedIn] = useState(false)
+
+	const logout = () => {
+    axiosWithAuth()
+      .post('/logout')
+      .then(res => {
+      console.log(res)
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+      })
+      .catch(err => {
+      console.log(err.response)
+    })
+  };
+	
 	console.log(cart)
 
   useEffect(()=>{
@@ -45,10 +61,10 @@ function App({newProducts}) {
 
 	return (
 		<div className="App">
-			<ProductContext.Provider value={{ products, setProducts, addItem }}>
+			<ProductContext.Provider value={{ products, setProducts, addItem, setIsLoggedIn}}>
 
 				<CartContext.Provider value={{cart, removeItem}}>
-					<Navigation />
+					<Navigation logout={logout}/>
 					{/* Routes */}
 					<Switch>
 						<Route exact path='/'>

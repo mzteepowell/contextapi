@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import * as yup from 'yup';
-import { itemFormSchema } from '../utils/formSchema';
+import  productFormSchema  from '../utils/productSchema';
 import axiosWithAuth from '../utils/axiosWithAuth';
 import { ProductContext } from '../contexts/ProductContext';
 
@@ -59,7 +59,7 @@ export default function AddItemForm(props) {
   const inputChange = (name, value) => {
     // Using yup.reach for individual form item validation
     yup
-      .reach(itemFormSchema, name) 
+      .reach(productFormSchema, name) 
       .validate(value)
       // Clears error if validation is successful
       .then(() => {
@@ -93,7 +93,7 @@ export default function AddItemForm(props) {
 
   // Employing an effect hook to validate the form each time it is updated so the submit button will be enabled once the form is completely valid
   useEffect(() => {
-    itemFormSchema.isValid(formValues).then(valid => {
+    productFormSchema.isValid(formValues).then(valid => {
       setDisabled(!valid);
     });
   }, [formValues])
