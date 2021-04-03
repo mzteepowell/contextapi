@@ -19,7 +19,9 @@
     "jquery": "^3.6.0",
     "moment": "^2.29.1",
     "popper.js": "^1.16.1",
-    "react-loader-spinner": "^4.0.0"
+    "react-confetti": "^6.0.1",
+    "react-loader-spinner": "^4.0.0",
+    "react-use": "^17.2.1"
   },
   "devDependencies": {
     "sass": "^1.32.8"

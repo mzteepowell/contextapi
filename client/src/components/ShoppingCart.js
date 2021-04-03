@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Link } from "react-router-dom";
 import { CartContext } from '../contexts/CartContext'
 // Components
 import Item from './ShoppingCartItem';
@@ -14,6 +15,10 @@ const ShoppingCart = props => {
 		}, 0).toFixed(2);
 	};
 
+	const onClick = (e) => {
+		window.location.href = '/cart/success';
+	}
+
 	return (
 		<div className="shopping-cart">
 			{cart.map(item => (
@@ -21,7 +26,7 @@ const ShoppingCart = props => {
 			))}
 			<div className="shopping-cart__checkout">
 				<p>Total: ${getCartTotal()}</p>
-			<button>Checkout</button>
+				<button onClick={onClick}>Checkout</button>
 			</div>
 		</div>
 	);

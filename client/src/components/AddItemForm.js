@@ -30,9 +30,7 @@ export default function AddItemForm(props) {
   const [formErrors, setFormErrors] = useState(initialFormErrors);
   const [disabled, setDisabled] = useState(initialDisabled);
   const [newProducts, setNewProducts] = useState([]);
-  const [ user, setUser] = useState({})
   const { setProducts } = useContext(ProductContext)
-  const userName = localStorage.getItem("name");
   const { push } = useHistory();
 
 

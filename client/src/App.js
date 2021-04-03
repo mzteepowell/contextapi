@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 // import { data } from './products';
-import axios from 'axios';
-import axiosWithAuth from './utils/axiosWithAuth';
+import {axiosWithAuth} from './utils/axiosWithAuth';
 import { CartContext } from './contexts/CartContext';
 import { ProductContext } from './contexts/ProductContext'
 import PrivateRoute from './components/PrivateRoute';
@@ -14,9 +13,11 @@ import ShoppingCart from './components/ShoppingCart';
 import SellersDashboard from './components/SellersDashboard';
 import useCart from './hooks/useCart';
 import AddItemForm from './components/AddItemForm';
+import SuccessPage from './components/SuccessPage';
+import initialProducts from './data/data';
 
 function App() {
-	const [products, setProducts] = useState([]);
+	const [products, setProducts] = useState(initialProducts);
 	const [cart, setCart] = useCart([]);
 	const [, setIsLoggedIn] = useState(false)
 
@@ -29,7 +30,8 @@ function App() {
 	console.log(cart)
 
   useEffect(()=>{
-    axios.get('http://localhost:5000/api/products')
+		axiosWithAuth()
+			.get('/items/items')
 			.then(res => {
 				console.log(res.data)
         setProducts(res.data);
@@ -69,7 +71,7 @@ function App() {
 							{/* <Products /> */}
 							<Products products={products} addItem={addItem} />
 						</PrivateRoute>
-						<PrivateRoute path="/cart">
+						<PrivateRoute exact path="/cart">
 							<ShoppingCart />
 						</PrivateRoute>
 						<PrivateRoute exact path='/sellers'>
@@ -78,6 +80,7 @@ function App() {
 						<PrivateRoute path='/sellers/add' >
 							<AddItemForm/>
 						</PrivateRoute>
+						<PrivateRoute path='/cart/success' component={SuccessPage}/>
 					</Switch>
 				</CartContext.Provider>
 			</ProductContext.Provider>

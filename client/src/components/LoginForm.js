@@ -4,7 +4,6 @@ import formSchema from '../utils/formSchema'
 import { useHistory } from 'react-router-dom'
 import { NewProductContext, ProductContext } from '../contexts/ProductContext';
 import axios from 'axios';
-import axiosWithAuth from '../utils/axiosWithAuth';
 
 const initialFormValues = {
   username: '',
@@ -76,7 +75,8 @@ export default function LoginForm() {
             localStorage.setItem("token", res.data.access_token);
             localStorage.setItem("name", formValues.username);
             push("/products");
-            // console.log(localStorage.getItem("name"));
+            console.log(localStorage.getItem("name"));
+            console.log(localStorage.getItem("token"));
           })
           .catch((err) => console.log({err}))
   }
@@ -85,21 +85,13 @@ export default function LoginForm() {
         const { name, value } = evt.target;
         update(name, value);
   };
-  
-    const getUsers = ()  => {
-    axiosWithAuth().get('users/user')
-      .then(res => {
-        console.log(res.data)
-        console.log(res.data.data)
-    })
-  }
-  getUsers();
-  
+    
   return (
-    <div>
-      <form className="form container" onSubmit={onSubmit}>
+    <div className='home-wrapper'>
+        <div className='item-wrapper'>
+      <form className="form" onSubmit={onSubmit}>
         <div>
-          <label>
+          <label className='form-row'> 
             Username:
             <input
               value={formValues.username}
@@ -108,10 +100,10 @@ export default function LoginForm() {
               type="text"
             />
             {formErrors.username}
-          </label>
+          </label >
         </div>
         <div>
-          <label>
+          <label  className='form-row'>
             Password:
             <input
               value={formValues.password}
@@ -122,11 +114,14 @@ export default function LoginForm() {
             {formErrors.password}
           </label>
         </div>
-        <div>
+          <div className='buttons'>
+            <div className='form-button'>
           <button id="submitBtn"
           disabled={disabled}>Log In</button>
+          </div>
         </div>
       </form>
+    </div>
     </div>
   )
 

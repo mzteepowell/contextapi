@@ -55,8 +55,7 @@ export default function SignUpForm() {
         signUpFormSchema.isValid(formValues).then(valid => {
           console.log(valid)
           return setDisabled(!valid)}
-     )
-   }, [formValues])
+    )}, [formValues])
   
   const onSubmit = (evt) => {
     evt.preventDefault();
@@ -91,6 +90,7 @@ export default function SignUpForm() {
   }
   const onChange = evt => {
     const { name, value } = evt.target;
+    console.log(evt.target.name, evt.target.value)
     inputChange(name, value);
   }
 
