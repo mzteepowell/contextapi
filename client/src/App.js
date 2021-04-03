@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 // import { data } from './products';
 import { CartContext } from './contexts/CartContext';
@@ -13,7 +13,6 @@ import useCart from './hooks/useCart';
 import AddItemForm from './components/AddItemForm';
 import SuccessPage from './components/SuccessPage';
 import initialProducts from './data/data';
-import axios from 'axios';
 
 function App() {
 	const [products, setProducts] = useState(initialProducts);
