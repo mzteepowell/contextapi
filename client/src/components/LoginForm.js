@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import * as yup from 'yup'
 import formSchema from '../utils/formSchema'
 import { useHistory } from 'react-router-dom'
-import { NewProductContext, ProductContext } from '../contexts/ProductContext';
+import { ProductContext } from '../contexts/ProductContext';
 import axios from 'axios';
 
 const initialFormValues = {
