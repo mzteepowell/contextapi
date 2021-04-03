@@ -5,11 +5,7 @@ import  productFormSchema  from '../utils/productSchema';
 import axiosWithAuth from '../utils/axiosWithAuth';
 import { ProductContext } from '../contexts/ProductContext';
 
-export default function AddItemForm(props) {
-  const { setProducts } = useContext(ProductContext)
-  const {push} = useHistory();
-
-    // Setting initial form values 
+  // Setting initial form values 
   const initialFormValues = {
     id: Date.now(),
     title: '',   
@@ -27,14 +23,17 @@ export default function AddItemForm(props) {
   };
 
   // Setting initial value for add item form submit button as disabled
-  const initialDisabled = true;
-
-  // Setting variables into newProducts
-
+const initialDisabled = true;
+  
+export default function AddItemForm(props) {
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
   const [disabled, setDisabled] = useState(initialDisabled);
   const [newProducts, setNewProducts] = useState([]);
+  const [ user, setUser] = useState({})
+  const { setProducts } = useContext(ProductContext)
+  const userName = localStorage.getItem("name");
+  const { push } = useHistory();
 
 
   // Using axios to post successfully submitted form with new item data to backend location

@@ -21,16 +21,9 @@ function App() {
 	const [, setIsLoggedIn] = useState(false)
 
 	const logout = () => {
-    axiosWithAuth()
-      .post('/logout')
-      .then(res => {
-      console.log(res)
-        localStorage.removeItem('token');
-        window.location.href = '/login';
-      })
-      .catch(err => {
-      console.log(err.response)
-    })
+		localStorage.removeItem('token');
+		window.location.href = '/login';
+		setIsLoggedIn(false);
   };
 	
 	console.log(cart)

@@ -3,6 +3,7 @@ import * as yup from 'yup'
 import { signUpFormSchema } from '../utils/signUpFormSchema';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
+import axiosWithAuth from '../utils/axiosWithAuth';
 
 const initialFormValues = {
     userrole:{

@@ -4,6 +4,7 @@ import formSchema from '../utils/formSchema'
 import { useHistory } from 'react-router-dom'
 import { NewProductContext, ProductContext } from '../contexts/ProductContext';
 import axios from 'axios';
+import axiosWithAuth from '../utils/axiosWithAuth';
 
 const initialFormValues = {
   username: '',
@@ -83,7 +84,16 @@ export default function LoginForm() {
   const change = (evt) => {
         const { name, value } = evt.target;
         update(name, value);
-      };
+  };
+  
+    const getUsers = ()  => {
+    axiosWithAuth().get('users/user')
+      .then(res => {
+        console.log(res.data)
+        console.log(res.data.data)
+    })
+  }
+  getUsers();
   
   return (
     <div>
