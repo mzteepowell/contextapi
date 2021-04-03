@@ -31,7 +31,7 @@ function App() {
 
   useEffect(()=>{
 		axiosWithAuth()
-			.get('/items/items')
+			.get('http://localhost:5000/api/products')
 			.then(res => {
 				console.log(res.data)
         setProducts(res.data);
