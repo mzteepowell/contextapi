@@ -5,7 +5,7 @@ const SuccessPage = () => {
 
     const onClick = () => {
         window.localStorage.removeItem('items');
-        window.location.href = '/products';     
+        window.location.href = '/sellers';     
     }
     return (
         <div className='success-page'>

@@ -74,7 +74,7 @@ export default function LoginForm() {
             setIsLoggedIn(true);
             localStorage.setItem("token", res.data.access_token);
             localStorage.setItem("name", formValues.username);
-            push("/products");
+            push("/sellers");
             console.log(localStorage.getItem("name"));
             console.log(localStorage.getItem("token"));
           })

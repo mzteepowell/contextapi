@@ -42,7 +42,7 @@ export default function AddItemForm(props) {
         console.log(res.data)
         setProducts(res.data, { id: Date.now() })
         setNewProducts(res.data, { id: Date.now() })
-        push(`/products`); // Successful post returns to dashboard
+        push(`/sellers`); // Successful post returns to dashboard
       })
       .catch(err => {
         console.log(err);

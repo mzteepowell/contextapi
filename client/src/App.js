@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 // import { data } from './products';
-import {axiosWithAuth} from './utils/axiosWithAuth';
 import { CartContext } from './contexts/CartContext';
 import { ProductContext } from './contexts/ProductContext'
 import PrivateRoute from './components/PrivateRoute';
 import Navigation from './components/Navigation';
 import LoginForm from './components/LoginForm';
 import SignUpForm from './components/SignUpForm';
-import Products from './components/Products';
 import ShoppingCart from './components/ShoppingCart';
 import SellersDashboard from './components/SellersDashboard';
 import useCart from './hooks/useCart';
 import AddItemForm from './components/AddItemForm';
 import SuccessPage from './components/SuccessPage';
 import initialProducts from './data/data';
+import axios from 'axios';
 
 function App() {
 	const [products, setProducts] = useState(initialProducts);
@@ -28,18 +27,6 @@ function App() {
   };
 	
 	console.log(cart)
-
-  useEffect(()=>{
-		axiosWithAuth()
-			.get('http://localhost:5000/api/products')
-			.then(res => {
-				console.log(res.data)
-        setProducts(res.data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-	}, []);
 
 	console.log(products);
 	const addItem = item => {
@@ -67,10 +54,10 @@ function App() {
 						</Route>
 						<Route path='/login' component={LoginForm}/>
 						<Route path='/signup' component={SignUpForm}/>
-						<PrivateRoute exact path="/products">
+						{/* <PrivateRoute exact path="/products">
 							{/* <Products /> */}
-							<Products products={products} addItem={addItem} />
-						</PrivateRoute>
+							{/* <Products products={products} addItem={addItem} /> */}
+						{/* </PrivateRoute> */} 
 						<PrivateRoute exact path="/cart">
 							<ShoppingCart />
 						</PrivateRoute>

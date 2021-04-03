@@ -1,13 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-// import { useParams } from 'react-router';
-// import axiosWithAuth from '../utils/axiosWithAuth';
+import { ProductContext } from '../contexts/ProductContext';
 import Products from './Products';
 import Greeting from './Greeting';
 
-
 const SellersDashboard = (props) => {
-
+const { products, addItem } = useContext(ProductContext)
   
   return (
     <div>
@@ -22,7 +20,7 @@ const SellersDashboard = (props) => {
           </div>
         </div>
       </div>
-      	<Products products={props.products} addItem={props.addItem} />
+      <Products products={products} addItem={addItem} />
     </div>
   )
 }
